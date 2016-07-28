@@ -31,6 +31,9 @@
   <input type="submit" value="match 'em all!"></p>
 <p>Results: (lists the <tt>arguments</tt> passed to the replacer function)</p>
 <ol id="matches"><li>(no results yet)</li></ol>
+<div style="clear: both;"></div>
+<p>Your browser: "<tt id="uagent">?</tt>" &ndash; <a target="_blank"
+  href="rgx-replace.browsers.md">Research notes</a></p>
 </form>
 
 <script>
@@ -40,22 +43,27 @@ function idv(id) { return document.getElementById(id).value; }
 
 function htmlify(txt) {
   htmlify.span.appendChild(document.createTextNode(String(txt)));
-  txt = htmlify.span.innerHTML.replace(/ /g, '&nbsp;'
-    ).replace(/\x00/g, '<u>0</u>'
-    ).replace(/\r/g, '<u>&#x21A9;</u>'
-    ).replace(/\t/g, '<u>&#x21B9;</u>'
-    ).replace(/\n/g, '<u>&para;</u><br>');
+  txt = htmlify.span.innerHTML;
   htmlify.span.innerHTML = '';
   return txt;
 }
 htmlify.span = document.createElement('span');
+
+document.getElementById('uagent').innerHTML = htmlify(navigator.userAgent);
 
 function tryMatch() {
   var matches = '', fullTxt = idv('txt'), quot, rplc;
   quot = function (x) {
     if (x === fullTxt) { return '<small>full input text</small>'; }
     var t = typeof x;
-    x = htmlify(x);
+    x = htmlify(x
+      ).replace(/\xA0|&nbsp;/g, '<u>_</u>'
+      ).replace(/ /g, '&nbsp;'
+      ).replace(/\x00/g, '<u>0</u>'
+      ).replace(/\r/g, '<u>&#x21A9;</u>'
+      ).replace(/\t/g, '<u>&#x21B9;</u>'
+      ).replace(/\n/g, '<u>&para;</u><br>'
+      );
     switch (t) {
     case 'number':
       break;
@@ -85,16 +93,5 @@ function tryMatch() {
 document.forms[0].onsubmit = tryMatch;
 tryMatch();
 </script>
-
-
-
-
-
-
-
-
-
-
-
 
 </body></html>
