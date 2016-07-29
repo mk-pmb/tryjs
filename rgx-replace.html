@@ -29,6 +29,9 @@
   value="\s+(\w+)(?=,)">
   <tt>/</tt> <input type="text" id="flags" size="5" value="g">
   <input type="submit" value="match 'em all!"></p>
+<p>Lookbehind emulation: Skip match if group #
+  <input type="text" id="badgrp" size="5" value="0">
+  matched any text; 0 = show all matches.</p>
 <p>Results: (lists the <tt>arguments</tt> passed to the replacer function)</p>
 <ol id="matches"><li>(no results yet)</li></ol>
 <div style="clear: both;"></div>
@@ -52,7 +55,7 @@ htmlify.span = document.createElement('span');
 document.getElementById('uagent').innerHTML = htmlify(navigator.userAgent);
 
 function tryMatch() {
-  var matches = '', fullTxt = idv('txt'), quot, rplc;
+  var matches = '', fullTxt = idv('txt'), badGrp = +idv('badgrp'), quot, rplc;
   quot = function (x) {
     if (x === fullTxt) { return '<small>full input text</small>'; }
     var t = typeof x;
@@ -73,7 +76,8 @@ function tryMatch() {
     return ('<small>' + t.substr(0, 3) + '</small> ' + x);
   };
   rplc = function () {
-    var argIdx, argTxt;
+    var argIdx;
+    if (badGrp && arguments[badGrp]) { return; }
     matches += '<li class="match"><ol start="0" class="match">';
     for (argIdx = 0; argIdx < arguments.length; argIdx += 1) {
       matches += '<li>' + quot(arguments[argIdx]) + '</li>';
@@ -88,7 +92,7 @@ function tryMatch() {
   document.getElementById('matches').innerHTML = (matches ||
     '<li>(no matches)</li>');
   return false;
-};
+}
 
 document.forms[0].onsubmit = tryMatch;
 tryMatch();
