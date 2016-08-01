@@ -14,6 +14,7 @@
       border: 1px solid lightgrey; margin: 1ex;
       padding: 0.5ex; padding-left: 0px; padding-right: 1ex;
     }
+    li.match p { padding: 0px; margin: 0px; margin-left: 1ex; }
     u { text-decoration: none; padding: 0px 0.5ex;
       background: dimgray; color: white; }
   </style>
@@ -25,13 +26,17 @@
 <p>Text: <textarea id="txt" cols="72" rows="8" wrap="soft">qui dolorem ipsum,
   quia dolor sit, amet,
 &#9;consectetur, adipisci velit,</textarea></p>
-<p>RegExp: <tt>/</tt> <input type="text" id="rgx" size="50"
-  value="\s+(\w+)(?=,)">
-  <tt>/</tt> <input type="text" id="flags" size="5" value="g">
+<p>RegExp: <tt>/</tt> <textarea id="rgx" cols="60" rows="4" wrap="soft"
+  >\s+(\w+)(?=,)
+  # non-standard addition: "x" flag strips newlines,
+  # leading whitespace and lines starting with "#".</textarea>
+  <tt>/</tt> <input type="text" id="flags" size="5" value="gx">
   <input type="submit" value="match 'em all!"></p>
 <p>Lookbehind emulation: Skip match if group #
   <input type="text" id="badgrp" size="5" value="0">
   matched any text; 0 = show all matches.</p>
+<p>Report limit: Show no more than
+  <input type="text" id="limit" size="8" value="20"> matches.
 <p>Results: (lists the <tt>arguments</tt> passed to the replacer function)</p>
 <ol id="matches"><li>(no results yet)</li></ol>
 <div style="clear: both;"></div>
@@ -55,7 +60,9 @@ htmlify.span = document.createElement('span');
 document.getElementById('uagent').innerHTML = htmlify(navigator.userAgent);
 
 function tryMatch() {
-  var matches = '', fullTxt = idv('txt'), badGrp = +idv('badgrp'), quot, rplc;
+  var matches = '', fullTxt = idv('txt'), rgxBody = idv('rgx'),
+    rgxFlags = idv('flags'), badGrp = +idv('badgrp'), quot, rplc,
+    matchStat = { limit: (+idv('limit') || 1), cnt: 0, hidden: 0 };
   quot = function (x) {
     if (x === fullTxt) { return '<small>full input text</small>'; }
     var t = typeof x;
@@ -78,19 +85,30 @@ function tryMatch() {
   rplc = function () {
     var argIdx;
     if (badGrp && arguments[badGrp]) { return; }
+    matchStat.cnt += 1;
+    if (matchStat.cnt > matchStat.limit) {
+      matchStat.hidden += 1;
+      return;
+    }
     matches += '<li class="match"><ol start="0" class="match">';
     for (argIdx = 0; argIdx < arguments.length; argIdx += 1) {
       matches += '<li>' + quot(arguments[argIdx]) + '</li>';
     }
     matches += '</ol></li>';
   };
+  rgxFlags = rgxFlags.replace(/x/, function () {
+    rgxBody = rgxBody.replace(/(^|\n)([\n\s]*|#[ -\uFFFF]+)*/g, '');
+    return '';
+  });
   try {
-    fullTxt.replace(new RegExp(idv('rgx'), idv('flags')), rplc);
+    fullTxt.replace(new RegExp(rgxBody, rgxFlags), rplc);
+    matches += '<li class="match"><p>+ ' + matchStat.hidden +
+      ' hidden<br/>= ' + matchStat.cnt + ' total</p></li>';
   } catch (err) {
     matches = '<li style="color: red;">' + htmlify(err) + '</li>';
   }
-  document.getElementById('matches').innerHTML = (matches ||
-    '<li>(no matches)</li>');
+  matches = (matches || '<li>(no matches)</li>');
+  document.getElementById('matches').innerHTML = matches;
   return false;
 }
 
