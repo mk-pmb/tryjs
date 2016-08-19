@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Page Scroll Positions</title>
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <style type="text/css">
+    #fix { position: fixed; top: 10em; left: 15em; }
+    #phi { margin-top: 9090px; margin-left: 9090px; opacity: 0.1; }
+
+    #pos { border: 1ex solid transparent; padding: 1ex 2ex; }
+    body.scrolled-left #pos { border-left-color: grey; }
+    body.scrolled-horiz #pos { border-right-color: grey; }
+    body.scrolled-up #pos { border-top-color: grey; }
+    body.scrolled-vert #pos { border-bottom-color: grey; }
+  </style>
+</head><body class="">
+
+<div id="fix">
+  <h1 id="pos">Loading JavaScripts&hellip; (or did it fail?)</h1>
+  <p>NB: Limit stop detection is configured with tolerance = <var
+    id="tol">(not ready)</var></p>
+</div>
+<p id="phi">&Phi;</p>
+
+<script src="../../../appldr161/lib/cjs-minifake/m.js"></script>
+<script src="find_window_scrollpos.js"></script>
+<script src="../../timers/throttled.js"></script>
+<script>
+/*jslint indent: 2, maxlen: 80, browser: true */
+(function () {
+  'use strict';
+  var upd, libs = require('./find_window_scrollpos'), tolerance = [200, 100];
+  libs.throttled = require('../../timers/throttled');
+  upd = function updateScrollPosition(outputElem) {
+    var msg = libs.findScrollPosition(window), time = String(new Date());
+    time = ((time.match(/\d+:[\d:]+/) || false)[0] || time);
+    msg = 'x=' + msg[0] + ', y=' + msg[1] + ' @ ' + time;
+    outputElem.innerHTML = msg;
+    console.log(msg);
+  }.bind(null, document.getElementById('pos'));
+  upd();
+  window.onscroll = libs.throttled.bind(null, upd, 30);
+  document.getElementById('tol').innerHTML = JSON.stringify(tolerance);
+  libs.lurkSetBodyCls(window, tolerance);
+}());
+</script>
+
+</body></html>
