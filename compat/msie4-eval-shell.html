@@ -1,0 +1,97 @@
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>An ersatz JavaScript shell for MSIE4</title>
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <style type="text/css">
+    form { position: relative; display: block; width: 99%; }
+    form textarea { font-family: monospace; font-size: inherit; width: 100%; }
+  </style>
+</head><body>
+
+<form method="get" action="nope://">
+  <textarea name="log" cols="80" rows="20" wrap="soft"></textarea>
+  <textarea name="cmd" cols="80" rows="5" wrap="soft"
+    >Type JS here and press Ctrl-Enter to eval() it.</textarea>
+  <input type="submit" name="eval" value="eval()" style="position: absolute;
+    bottom: 0px; right: 0px; font-size: 60%;">
+</form>
+
+<script src="../../es5-shim/es5-shim.min.js"></script>
+<script src="../../es5-shim/es5-sham.min.js"></script>
+<script src="../../jquery-dist-pmb/jquery/jquery-1.x.min.js"></script>
+<!-- ^-- MSIE 4 (and even 6) don't support jQuery 2.x -->
+<script>
+/*jslint indent: 2, maxlen: 80, browser: true */
+(function installMsie4EvalShell() {
+  'use strict';
+  var form = document.forms[0], fel = form.elements, fcmd = fel.cmd,
+    resultVarName = '_';
+
+  window.sortedInplace = function (arr) { return (arr.sort() || arr); };
+
+  window.quoteStr = function (s) {
+    s = String(s);
+    if (s.match(/\\|'/)) { return '"' + s.replace(/(\\|")/g, '\\$1') + '"'; }
+    return "'" + s + "'";
+  };
+
+  window.dir = function dir(x) {
+    var maxDepth = ((typeof this) === 'number' ? this : 3), t = typeof x;
+    if (x instanceof Array) {
+      return '[' + Array.prototype.map.call(x, dir.bind(maxDepth - 1)
+        ).join(', ') + ']';
+    }
+    if (x instanceof Error) {
+      t = 'Error';
+      x = String(x).replace(/^(\w+): /, function (match, errType) {
+        t = (match && errType);
+        return '';
+      });
+      x = window.quoteStr(x);
+    }
+    if ((x && typeof x) === 'object') {
+      // NB: in MSIE6, many objects aren't instanceof Object.
+      t = Object.prototype.toString(x).split(/^\S+\s+|\]$/)[1];
+      x = '{' + window.sortedInplace(Object.keys(x)).join(', ') + '}';
+    }
+    if (t === 'string') { x = window.quoteStr(x); }
+    return '‹' + t + '›' + String(x);
+  };
+
+  form.onsubmit = function () {
+    var cmd = String(fcmd.value);
+    try {
+      /*jslint evil: true */
+      window[resultVarName] = eval(cmd);
+      /*jslint evil: false */
+    } catch (err) {
+      window[resultVarName] = err;
+    }
+    fel.log.value = '« ' + cmd + '\n» ' +
+      window.dir(window[resultVarName]);
+    fcmd.focus();
+    return false;
+  };
+  fcmd.onkeydown = function (evt) {
+    if (!evt) { evt = window.event; }
+    if (!evt) { return; }
+    evt.keys = (evt.ctrlKey ? 'C-' : '') + (evt.altKey ? 'A-' : ''
+      ) + (evt.shiftKey ? 'S-' : '') + evt.keyCode;
+    // fel.eval.value = evt.keys;
+    switch (evt.keys) {
+    case 'C-13':
+      form.onsubmit();
+      break;
+    default:
+      return;
+    }
+    (evt.preventDefault || Object)();
+    (evt.stopPropagation || Object)();
+    return false;
+  };
+
+
+}());
+</script>
+
+</body></html>
