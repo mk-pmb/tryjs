@@ -27,8 +27,6 @@
   var form = document.forms[0], fel = form.elements, fcmd = fel.cmd,
     resultVarName = '_';
 
-  window.sortedInplace = function (arr) { return (arr.sort() || arr); };
-
   window.quoteStr = function (s) {
     s = String(s);
     if (s.match(/\\|'/)) { return '"' + s.replace(/(\\|")/g, '\\$1') + '"'; }
@@ -52,7 +50,7 @@
     if ((x && typeof x) === 'object') {
       // NB: in MSIE6, many objects aren't instanceof Object.
       t = Object.prototype.toString(x).split(/^\S+\s+|\]$/)[1];
-      x = '{' + window.sortedInplace(Object.keys(x)).join(', ') + '}';
+      x = '{' + Object.keys(x).sort().join(', ') + '}';
     }
     if (t === 'string') { x = window.quoteStr(x); }
     return '‹' + t + '›' + String(x);
