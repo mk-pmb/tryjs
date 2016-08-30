@@ -3,17 +3,20 @@
   <title>An ersatz JavaScript shell for MSIE4</title>
   <meta http-equiv="Content-Script-Type" content="text/javascript">
   <style type="text/css">
+    html, body, form { margin: 0em; padding: 0em; }
     form { position: relative; display: block; width: 99%; }
-    form textarea { font-family: monospace; font-size: inherit; width: 100%; }
+    form textarea { font-family: monospace; font-size: 12px; width: 100%;
+      border: 0px solid gray; border-bottom-width: 1px; padding: 2px; }
+    #eval-btn { position: absolute; bottom: 0px; right: 0px; font-size: 60%; }
   </style>
 </head><body>
 
 <form method="get" action="nope://">
-  <textarea name="log" cols="80" rows="20" wrap="soft"></textarea>
-  <textarea name="cmd" cols="80" rows="5" wrap="soft"
-    >Type JS here and press Ctrl-Enter to eval() it.</textarea>
-  <input type="submit" name="eval" value="eval()" style="position: absolute;
-    bottom: 0px; right: 0px; font-size: 60%;">
+  <textarea name="log" cols="72" rows="6" wrap="soft"></textarea>
+  <textarea name="cmd" cols="72" rows="3" wrap="soft"
+    >title(dir(shellSize(80, 20, 5)));
+    // Type JS here and press Ctrl-Enter to eval() it.</textarea>
+  <input type="submit" id="eval-btn" name="eval" value="eval()">
 </form>
 
 <script src="../../es5-shim/es5-shim.min.js"></script>
@@ -26,6 +29,18 @@
   'use strict';
   var form = document.forms[0], fel = form.elements, fcmd = fel.cmd,
     resultVarName = '_';
+
+  window.shellSize = function (width, logHeight, promptHeight) {
+    if (width > 0) { fcmd.cols = fel.log.cols = width; }
+    if (logHeight > 0) { fel.log.rows = logHeight; }
+    if (promptHeight > 0) { fcmd.rows = promptHeight; }
+    return [fcmd.cols, fel.log.rows, fcmd.rows];
+  };
+
+  window.title = function (newTitle) {
+    if (newTitle !== undefined) { document.title = String(newTitle); }
+    return document.title;
+  };
 
   window.quoteStr = function (s) {
     s = String(s);
@@ -56,17 +71,24 @@
     return '‹' + t + '›' + String(x);
   };
 
-  form.onsubmit = function () {
-    var cmd = String(fcmd.value);
+  form.veval = function (cmd) {
+    var result;
     try {
       /*jslint evil: true */
-      window[resultVarName] = eval(cmd);
+      result = (cmd instanceof Function ? cmd() : eval(cmd));
       /*jslint evil: false */
     } catch (err) {
-      window[resultVarName] = err;
+      result = err;
     }
-    fel.log.value = '« ' + cmd + '\n» ' +
-      window.dir(window[resultVarName]);
+    fel.log.value = '« ' + cmd + '\n» ' + window.dir(result);
+    return result;
+  };
+
+  form.veval('navigator.userAgent');
+
+  form.onsubmit = function () {
+    var result = form.veval(String(fcmd.value));
+    window[resultVarName] = result;
     fcmd.focus();
     return false;
   };
