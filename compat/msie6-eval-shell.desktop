@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=msie6-eval-shell
+Exec=msie6-eval-shell
+Icon=wine
+Type=Application
+GenericName=
+Comment=provided by webspeech tools (b/c wine's normal ie6 crashes on startup)
+Path=
+Terminal=false
+StartupNotify=false
