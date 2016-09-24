@@ -48,27 +48,77 @@
     return "'" + s + "'";
   };
 
-  window.dir = function dir(x) {
-    var maxDepth = ((typeof this) === 'number' ? this : 3), t = typeof x;
-    if (x instanceof Array) {
-      return '[' + Array.prototype.map.call(x, dir.bind(maxDepth - 1)
-        ).join(', ') + ']';
+  if (Object.keys === undefined) {
+    // es5-shim fail?
+    Object.keys = function Object_keys_shim(obj) {
+      if ((obj === null) || (obj === undefined)) {
+        throw new TypeError("can't convert " + String(obj) + " to object");
+      }
+      var keys = [], key;
+      for (key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          keys[keys.length] = key;
+        }
+      }
+      return keys;
+    };
+  }
+
+  if (Array.prototype.map === undefined) {
+    // es5-shim fail?
+    Array.prototype.map = function Array_map_shim(iter) {
+      var idx, results = [];
+      for (idx = 0; idx < this.length; idx += 1) {
+        results[idx] = iter(this[idx], idx, this);
+      }
+      return results;
+    };
+  }
+
+  window.dir = function dir(x, maxDepth) {
+    var t = typeof x;
+    maxDepth = (+(maxDepth === undefined ? 4 : maxDepth) || 0);
+    if (maxDepth < 1) { return '…'; }
+    switch (x) {
+    case null:
+    case undefined:
+      t = String(x);
+      x = undefined;
+      break;
     }
-    if (x instanceof Error) {
-      t = 'Error';
-      x = String(x).replace(/^(\w+): /, function (match, errType) {
-        t = (match && errType);
-        return '';
-      });
-      x = window.quoteStr(x);
-    }
-    if ((x && typeof x) === 'object') {
+    switch (t) {
+    case 'object':
+      if (x instanceof Array) {
+        if (maxDepth < 2) { return '[…]'; }
+        // test: [1, [2, [3, [4, [5, [6], 5], 4], 3], 2], 1]
+        return '[' + x.map(function (v) { return dir(v, maxDepth - 1); }
+          ).join(', ') + ']';
+      }
+      if (x instanceof Error) {
+        t = 'Error';
+        x = String(x.message || x).replace(/^(\w+): /, function (match, type) {
+          t = (match && type);
+          return '';
+        });
+        x = window.quoteStr(x);
+        break;
+      }
       // NB: in MSIE6, many objects aren't instanceof Object.
-      t = Object.prototype.toString(x).split(/^\S+\s+|\]$/)[1];
-      x = '{' + Object.keys(x).sort().join(', ') + '}';
+      t = Object.prototype.toString(x).replace(/^\[object |\]$/g, '');
+      x = Object.keys(x).sort();
+      x = '{' + x.length + ': ' + x.join(', ') + '}';
+      break;
+    case 'number':
+      t = 'num';
+      break;
+    case 'string':
+      t = 'str';
+      x = window.quoteStr(x);
+      break;
     }
-    if (t === 'string') { x = window.quoteStr(x); }
-    return '‹' + t + '›' + String(x);
+    t = '‹' + t + '›';
+    if (x !== undefined) { t += String(x); }
+    return t;
   };
 
   form.veval = function (cmd) {
