@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>CDATA in HTML</title>
+  <style type="text/css">
+    em { font-weight: bold; font-style: italic; }
+  </style>
+</head><body>
+
+<h2>CDATA in HTML</h2>
+
+<p>It has <!CDATA[[><em>]]> no <!CDATA[[></em>]]>
+special effect, that's why you see its end sequence as text
+and the "em" tags did have their effect.</p>
+
+<p>Note that what you did <em>not</em> see in above text
+were the "greater than" characters at start of the would-be
+character data. <!CDATA[[<em>]]>Without them<!CDATA[[</em>]]>,
+the "em" tags would not be tags of their own, but be part of
+a very broken "!CDATA[[&lt;em" tag that usual browsers don't
+know and therefor ignore, so you see the
+<!CDATA[[<em>]]>end sequence<!CDATA[[</em>]]>
+without any special formatting.</p>
+
+<p>CDATA sections also won't stop <!CDATA[[ <br class="not-a-br-tag">
+  <!-- regular exclamation dash dash
+  -->]]> comments from having their text-hiding effect.</p>
+
+</body></html>
