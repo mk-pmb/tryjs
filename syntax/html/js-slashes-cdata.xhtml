@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>// + CDATA + JS</title>
+  <style type="text/css">
+    em { font-weight: bold; font-style: italic; }
+  </style>
+</head><body>
+
+<h2>Why not to wrap JavaScript in //&lt;![CDATA[ … // ]]&gt;</h2>
+<p>In XML, you can safely include JS code by wrapping it in a CDATA section.</p>
+<p>If you're used to HTML and there to wrap JS in a <code>&lt;-- comment
+--&gt;</code>, and to mark the HTML comment marks as JS line comments by
+prefixing <code>//</code>, you might feel inclined to "comment-out" the
+CDATA marks as well.</p>
+
+<p>There's no need to. They are XML markup. They are not part of the text
+inside your tag, as this demo shows:</p>
+
+<pre>Loading JS…</pre>
+<script type="text/javascript" language="javascript">
+var pre, text = String(function () {
+  //<![CDATA[ /*start of js*/
+  re]]>tu<![CDATA[rn '</script><script class="evil">redirectToMalware();</script>';
+  //]]> /*end of js*/
+});
+text = doc<![CDATA[ument.cr]]>eateTextNode(text);
+pre = document.getElementsByTagName('pr<![CDATA[e')[0];
+pre.innerHTML = ']]>';
+pre.appendChild(text);
+</script>
+
+<h2>But they don't hurt either, so why not waste bandwidth on slashes?</h2>
+<p>They are <b>a trap for maintenance</b>.
+  If your template or software someday changes the DOCTYPE to HTML,
+  a lot of pages will still seem to work,
+  and you won't be reminded that those
+  <a href="cdata-in.html">CDATA marks have no special effect in HTML.</a></p>
+<p>If you miss that transition, your code might suddenly become
+  <b>susceptible to HTML injection attacks</b>
+  because some bytes that had been perfectly safe JavaScript before,
+  might now be read as HTML by browsers.</p>
+
+</body></html>
