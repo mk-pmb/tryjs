@@ -3,7 +3,7 @@ tryjs
 =====
 Does your browser understand you the way you think it should? Try it:
 
-  * [RegExp demonstrator](rgx-replace.html)
+  * [RegExp demonstrator](https://mk-pmb.github.io/tryjs/regexp/rgx-replace.html)
 
 
 
