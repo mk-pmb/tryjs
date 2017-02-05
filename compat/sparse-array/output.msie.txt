@@ -1,0 +1,13 @@
+﻿[log start: …]
+I: del:
+I:     orig:   has−  in− undefined  0::2       undefined
+I:     mod :   has− +IN  true       0:true:2   true
+I: set:
+I:     orig:   has−  in− undefined  0::2       undefined
+I:     mod :   has− +IN  true       0:true:2   true
+I: undef:
+I:     orig:   has−  in− undefined  0::2       undefined
+I:     mod :   has− +IN  true       0:true:2   true
+I: unset:
+I:     orig:  +HAS  +IN  undefined  0::2       undefined
+I:     mod :  +HAS  +IN  undefined  0::2       undefined

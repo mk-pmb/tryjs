@@ -1,0 +1,17 @@
+--- output.msie.txt	2017-02-05 14:55:46.671269769 +0100
++++ output.ffox.txt	2017-02-05 14:55:32.223269219 +0100
+@@ -2,12 +2,12 @@
+ I: del:
+ I:     orig:   has−  in− undefined  0::2       undefined
+ I:     mod :   has− +IN  true       0:true:2   true
+ I: set:
+ I:     orig:   has−  in− undefined  0::2       undefined
+ I:     mod :   has− +IN  true       0:true:2   true
+ I: undef:
+-I:     orig:   has−  in− undefined  0::2       undefined
+-I:     mod :   has− +IN  true       0:true:2   true
++I:     orig:  +HAS  +IN  undefined  0::2       undefined
++I:     mod :  +HAS  +IN  undefined  0::2       undefined
+ I: unset:
+ I:     orig:  +HAS  +IN  undefined  0::2       undefined
+ I:     mod :  +HAS  +IN  undefined  0::2       undefined
