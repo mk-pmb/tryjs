@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Pressure Test</title>
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <style>
+    html, body {
+      position: absolute;
+      display: block;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      margin: 0px;
+      overflow: hidden;
+    }
+    body {
+      background-color: black;
+      cursor: crosshair;
+    }
+    #circ {
+      top: 0; left: -200%;
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      border-radius: 50%;
+      border: 4px double gray;
+      transform-origin: top left 0;
+      transform: translate(-50%, -50%);
+      cursor: inherit;
+    }
+    #circ[updown="up"] { border-color: green; }
+    #circ[overout="out"] { border-color: firebrick; }
+    #circ[pres="1"] { border-color: orange; }
+  </style>
+</head><body>
+
+<div id="circ" updown="up" overout="out"></div>
+
+<script>
+/*jslint indent: 2, maxlen: 80, browser: true */
+(function () {
+  'use strict';
+  var circ = document.getElementById('circ'), circSt = circ.style;
+  function chkAlt(n, a, b, p) {
+    p = (p || '');
+    if (n === (p + a)) { return circ.setAttribute(a + b, a); }
+    if (n === (p + b)) { return circ.setAttribute(a + b, b); }
+  }
+  function upd(ev) {
+    window.latestEvent = ev;
+    var what = (ev.type || ev.name), bgc = null,
+      pres = (+ev.pressure || +ev.mozPressure || 0),
+      x = ev.clientX, y = ev.clientY;
+    circSt.top = y + 'px';
+    circSt.left = x + 'px';
+    circSt.padding = Math.floor(pres * 250) + 'px';
+    circ.setAttribute('pres', pres * 100);
+    chkAlt(what, 'up', 'down', 'mouse');
+    chkAlt(what, 'over', 'out', 'mouse');
+    console.log(circ, ev);
+  }
+  'over down up out'.replace(/\S+/g, function (evName) {
+    document.body.addEventListener('mouse' + evName, upd);
+  });
+  function mmv(ev) {
+    var now = Date.now();
+    if (now < mmv.ign) { return; }
+    mmv.ign = now + 100;
+    upd(ev);
+  }
+  document.body.addEventListener('mousemove', mmv);
+
+
+
+}());
+</script>
+
+</body></html>
