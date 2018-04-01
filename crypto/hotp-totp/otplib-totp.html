@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>  </title>
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <!--meta http-equiv="refresh" content=";URL="-->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    .why { font-size: smaller; }
+    table, tr, td, th {
+      text-align: left;
+      border-width: 0;
+      border-collapse: collapse;
+      padding: 2px 5px;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+  </style>
+</head><body>
+
+<h2>TOTP in your Browser</h2>
+<p>Defeat the entire purpose of Two Factor Authentification (2FA) by
+calculating your TAN in the same browser that saves your password. ;-)</p>
+<p class="why">Because really, Gitlab.
+Don't try and make me jump useless hoops, with bad UI even.
+If you want secure login, #%*$@ just implement the real deal
+(SSH or SSL Client Certificates) already.</p>
+
+<h3>Shared secret:</h3>
+<form action="x-nope://dont-submit" method="get"><table><tr>
+  <td rowspan="3">encoded as…</td>
+  <td>Base 32:</td>
+  <td><input type="text" id="key32" size="40"
+    value="uee7 dysq g46j svhp fuwi qtry me4q cwxj"></td>
+</tr><tr>
+  <td></td>
+  <td><input id="base32to64" type="button"
+    value="&darr; translate &darr;"></td>
+</tr><tr>
+  <td>Base 64:</td>
+  <td><input id="key64" type="text" size="40" value="">
+    <input id="key2hash" type="button" value="save in URL">
+    </td>
+</table></form>
+
+<h2>TAN: <span id="tan">??? ???</span></h2>
+<p>Validity until: <span id="fresh">?</span></p>
+
+<script src="../../../otplib-browser-min/otplib-browser.js"></script>
+<!-- ^-- not compatible to cjs-minifake -->
+
+<script src="../../../cjs-minifake-pmb/m.js"></script>
+<script modname="hi-base32" src="../../../hi-base32/build/base32.min.js"></script>
+<script modname="qrystr" src="../../../qrystr-js/qs.js"></script>
+<script src="otplib-totp.js"></script>
+
+</body></html>
