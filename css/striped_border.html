@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Striped border demo</title>
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <style>
+    aside {
+      display: block;
+      float: left;
+      --brd-w:  50;
+      --box-w:  calc(var(--brd-w) * 2px);
+      margin: 2em;
+    }
+
+    aside p, aside b { display: block; float: left; margin: 0; }
+
+    aside p {
+      margin-right: 1ex;
+      background: gainsboro;
+      width: calc(var(--box-w) * 2);
+      height: calc(var(--box-w) * 2);
+      background-image: var(--pat-img);
+    }
+
+    aside b {
+      width: var(--box-w); height: var(--box-w);
+      border: calc(var(--brd-w) * 1px) solid grey;
+      border-image-source: var(--pat-img);
+      border-image-slice: 33.3333%;
+      border-image-repeat: stretch;
+      border-image-repeat: repeat;
+      border-image-repeat: round;
+      border-image-outset: 0;
+    }
+
+    .horz-01 {
+      --pat-c1: blue;
+      --pat-c2: skyblue;
+      --pat-step: 10;
+      --pat-img: repeating-linear-gradient(to right,
+          var(--pat-c1) 0
+          , var(--pat-c1) calc(var(--pat-step) * 1px * 0.5)
+          , var(--pat-c2) calc(var(--pat-step) * 1px * 0.5)
+          , var(--pat-c2) calc(var(--pat-step) * 1px)
+        );
+    }
+
+    .diag-01 {
+      --pat-c1: red;
+      --pat-c2: yellow;
+      --pat-step: 10;
+      --pat-img: repeating-linear-gradient(135deg,
+          var(--pat-c1) 0
+          , var(--pat-c2) calc(var(--pat-step) * 1.41px * 0.5)
+          , var(--pat-c1) calc(var(--pat-step) * 1.41px)
+        );
+    }
+  </style>
+</head><body>
+  <aside class="horz-01"><p></p><b></b></aside>
+  <aside class="diag-01"><p></p><b></b></aside>
+</body></html>
