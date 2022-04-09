@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <title>URL-safe Characters</title>
+  <style>
+    body { background: #334; color: silver; margin: 1em; }
+    s, u {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 20px;
+      padding: 2px 4px;
+      text-decoration: none;
+      margin-right: 4px;
+    }
+    s { background-color: lightgreen; color: darkgreen; }
+    u { background-color: yellow; color: sienna; }
+  </style>
+</head><body>
+
+<p>Seems like the script hasn't rendered (yet). Preview:</p>
+<p>Unmodified in both encodeURI and …Component: <s>!'()*-.0…9A…Z_a…z~</s></p>
+<p>Modified in …Component: <u>#$&+,/:;=?@</u></p>
+
+<script>
+/*jslint indent: 2, maxlen: 80, continue: false, unparam: false, browser: true */
+(function render() {
+  'use strict';
+  var i, c, s, h = '\n<p>', t, g = { s: '', u: '' };
+  function jump(j) {
+    i += j;
+    s += '&hellip;' + String.fromCharCode(i);
+  }
+  for (i = 0; i < 128; i += 1) {
+    s = String.fromCharCode(i);
+    c = (((s === encodeURIComponent(s)) && 's')
+      || ((s === encodeURI(s)) && 'u'));
+    if (c) {
+      if ((s === 'A') || (s === 'a')) { jump(25); }
+      if (s === '0') { jump(9); }
+      t = '<' + c + '>' + s + '</' + c + '>';
+      h += t;
+      g[c] += t;
+    }
+  }
+  h += '</p>\n';
+  function r(k) { h += '<p>' + g[k] + '</p>\n'; }
+  r('s');
+  r('u');
+  document.body.innerHTML = h;
+}());
+</script>
+
+</body></html>
