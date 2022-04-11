@@ -16,6 +16,10 @@
 
   "private": true, "license": "GPL-2.0-only",
 
+  "eslintConfig": { "extends": "nodejs-pmb" },
+
+  "engines": { "npm": ">=7.0.0", "node": ">=16.0.0" },
+
 
   "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
 }

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Alphabet Transformer</title>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    body, form {
+      background-color: hsl(200, 30%, 15%);
+      color: hsl(200, 15%, 60%);
+    }
+    .form, #out li { border-width: 0; border-style: solid; }
+    .form, #out li, input, textarea { border-color: hsl(200, 15%, 60%); }
+    #out li { border-bottom-width: 1px; }
+    form { position: fixed; top: 0; left: 0em; right: 0; }
+    form.form { border-bottom-width: 2px; }
+    .form { height: 15em; }
+    input, textarea {
+      font-size: inherit;
+      color: inherit;
+      background-color: hsl(200, 15%, 25%);
+      color: hsl(200, 15%, 80%);
+    }
+    #al, .tx { font-size: 200%; }
+    #dtx, #dal { position: absolute; top: 0.5em; bottom: 1.5em; }
+    textarea { width: 100%; height: 100%; }
+    #dal { left: 1em; width: 12.7em; }
+    #dtx { left: 15em; right: 1.5em; }
+    #out { list-style-type: none; padding: 0; margin: 1em; margin-top: 0;
+      margin-bottom: 300em;
+    }
+    #out li { white-space: pre; margin: 0; padding: 0.5em; }
+    p { margin: 0; }
+    #hints { display: none; }
+    p.hint:before { content: "\270E  "; }
+    p.hint { margin-left: 2em; margin-bottom: 0.5em; opacity: 0.7; }
+  </style>
+</head><body>
+
+<form class="form" action="about:blank" method="get">
+<div id="dal"><textarea id="al" cols="10" rows="10" wrap="off">
+U+1F110 parenthesized latin capital letter a @ Enclosed Alphanumeric Supplement
+^:U+249C parenthesized latin small letter a @ Enclosed Alphanumerics
+^:
+^:U+2474 parenthesized digit one @ Enclosed Alphanumerics
+
+(@ Enclosed Alphanumerics)
+U+24B6 circled latin capital letter a
+^:U+24D0 circled latin small letter a
+^:U+24EA circled digit zero
+(altn. U+1F10B dingbat circled sans-serif digit zero @ Enclosed Alphanumeric Supplement)
+^:U+2460 circled digit one
+(altn. U+2780 dingbat circled sans-serif digit one @ Dingbats)
+
+(@ Enclosed Alphanumeric Supplement)
+U+1F130 squared latin capital letter a
+
+U+1F150 negative circled latin capital letter a
+^:
+^:U+24FF negative circled digit zero
+(altn. U+1F10C dingbat negative circled sans-serif digit zero)
+^:U+2776 dingbat negative circled digit one @ Dingbats
+
+U+1F170 negative squared latin capital letter a
+
+U+1F1E6 regional indicator symbol letter a
+
+(@ Halfwidth And Fullwidth Forms)
+U+FF21 fullwidth latin capital letter a
+^:U+FF41 fullwidth latin small letter a
+^:U+FF10 fullwidth digit zero
+
+
+
+(@ Mathematical Alphanumeric Symbols)
+U+1D400 mathematical bold capital a
+^:U+1D41A mathematical bold small a
+^:U+1D7CE mathematical bold digit zero
+
+U+1D434 mathematical italic capital a
+^:U+1D44E mathematical italic small a
+
+U+1D468 mathematical bold italic capital a
+^:U+1D482 mathematical bold italic small a
+
+U+1D49C mathematical script capital a
+^:U+1D4B6 mathematical script small a
+
+U+1D4D0 mathematical bold script capital a
+^:U+1D4EA mathematical bold script small a
+
+U+1D504 mathematical fraktur capital a
+^:U+1D51E mathematical fraktur small a
+
+U+1D538 mathematical double-struck capital a
+^:U+1D552 mathematical double-struck small a
+^:U+1D7D8 mathematical double-struck digit zero
+
+U+1D56C mathematical bold fraktur capital a
+^:U+1D586 mathematical bold fraktur small a
+
+U+1D5A0 mathematical sans-serif capital a
+^:U+1D5BA mathematical sans-serif small a
+^:U+1D7E2 mathematical sans-serif digit zero
+
+U+1D5D4 mathematical sans-serif bold capital a
+^:U+1D5EE mathematical sans-serif bold small a
+^:U+1D7EC mathematical sans-serif bold digit zero
+
+U+1D608 mathematical sans-serif italic capital a
+^:U+1D622 mathematical sans-serif italic small a
+
+U+1D63C mathematical sans-serif bold italic capital a
+^:U+1D656 mathematical sans-serif bold italic small a
+
+U+1D670 mathematical monospace capital a
+^:U+1D68A mathematical monospace small a
+^:U+1D7F6 mathematical monospace digit zero
+</textarea></div>
+<div id="dtx"><textarea id="tx" cols="80" rows="20" wrap="off">
+01234 ABCDEFGHIJKLMNOPQRSTUVWXYZ
+56789 abcdefghijklmnopqrstuvwxyz
+</textarea></div>
+</form>
+
+<div class="form" id="form-spacer"></div>
+<ul id="out"></ul>
+
+<ul id="hints">
+  <li id="hint-1f1e6">Pairs of these combine to form country flags.</li>
+</ul>
+
+<script src="alphabet_transposer.mjs"></script>
+
+</body></html>
