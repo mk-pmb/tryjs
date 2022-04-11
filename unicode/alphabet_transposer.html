@@ -11,6 +11,7 @@
     body, form {
       background-color: hsl(200, 30%, 15%);
       color: hsl(200, 15%, 60%);
+      display: block; z-index: 5;
     }
     .form, #out li { border-width: 0; border-style: solid; }
     .form, #out li, input, textarea { border-color: hsl(200, 15%, 60%); }
@@ -42,6 +43,9 @@
 
 <form class="form" action="about:blank" method="get">
 <div id="dal"><textarea id="al" cols="10" rows="10" wrap="off">
+(@ Enclosed Alphanumeric Supplement)
+U+1F1E6 regional indicator symbol letter a
+
 U+1F110 parenthesized latin capital letter a @ Enclosed Alphanumeric Supplement
 ^:U+249C parenthesized latin small letter a @ Enclosed Alphanumerics
 ^:
@@ -66,14 +70,10 @@ U+1F150 negative circled latin capital letter a
 
 U+1F170 negative squared latin capital letter a
 
-U+1F1E6 regional indicator symbol letter a
-
 (@ Halfwidth And Fullwidth Forms)
 U+FF21 fullwidth latin capital letter a
 ^:U+FF41 fullwidth latin small letter a
 ^:U+FF10 fullwidth digit zero
-
-
 
 (@ Mathematical Alphanumeric Symbols)
 U+1D400 mathematical bold capital a
@@ -121,8 +121,8 @@ U+1D670 mathematical monospace capital a
 ^:U+1D7F6 mathematical monospace digit zero
 </textarea></div>
 <div id="dtx"><textarea id="tx" cols="80" rows="20" wrap="off">
-01234 ABCDEFGHIJKLMNOPQRSTUVWXYZ
-56789 abcdefghijklmnopqrstuvwxyz
+01234 | ABCDE FGHIJ KLMNO PQRST UVW | XYZ
+56789 | abcde fghij klmno pqrst uvw | xyz
 </textarea></div>
 </form>
 
