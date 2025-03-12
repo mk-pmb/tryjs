@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Image coordinates measurement hack</title>
+  <meta name="viewport" content="width=device-width">
+</head><body>
+<img src="https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/1008,756/0/gray.jpg"
+  style="position: absolute;">
+<p style="position: absolute; left: 400px; width: 600px;">
+  The idea for this demonstration is to make an improvised coordinates picker
+  for Firefox's "Open Image in New Tab":
+  Copy the code below (starting from the &lt;style&gt; tag),
+  then in the image tab, open the DOM inspector,
+  right-click the body tag, "Paste" &rarr; "As Last Child",
+  and now you should have markers in the bottom-right corner.
+</p>
+
+
+
+
+<style type="text/css">
+  html, body, img, s { margin: 0; }
+  s {
+    display: block; position: absolute; box-sizing: border-box;
+    width: 99vw; height: 99vh; min-width: 2em; min-height: 2em;
+    text-decoration: none;
+    border: 2px solid lime; border-top-width: 0; border-left-width: 0;
+    border-image: repeating-linear-gradient(45deg,
+      lime, lime 3px, green 3px, green 6px) 1;
+    clip-path: inset(calc(100% - 15px) 0 0 calc(100% - 15px));
+  }
+  s:hover { overflow: scroll; resize: both;
+    clip-path: inset(calc(100% - 5em) 0 0 calc(100% - 30em)); }
+  s:hover::before {
+    display: block; position: absolute; content: attr(style); z-index: 5;
+    padding: 5px; pointer-events: none; color: white; text-shadow:
+      2px 2px 5px black, -2px -2px 5px black, 2px -2px 5px black, -2px 2px 5px black,
+      2px 2px 5px black, -2px -2px 5px black, 2px -2px 5px black, -2px 2px 5px black,
+      2px 2px 5px black, -2px -2px 5px black, 2px -2px 5px black, -2px 2px 5px black,
+      2px 2px 5px black, -2px -2px 5px black, 2px -2px 5px black, -2px 2px 5px black,
+      2px 2px 5px black, -2px -2px 5px black, 2px -2px 5px black, -2px 2px 5px black,
+      0 0 5px black;
+    border: 1px solid yellow;
+  }
+  s:hover::before { text-align: right; right: 2em; bottom: 0; }
+</style>
+
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
+<s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s>
