@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>contentEditableToBase64</title>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <style>
+    body { background-color: gainsboro; color: black; }
+    a { color: blue; }
+    section { float: left; margin: 0 1em; }
+    #in, #out { width: 40vw; height: 70vh; background-color: white; }
+  </style>
+</head><body>
+<section>
+  <h3>&darr; Paste your rich text into here</h3>
+  <div id="in" contentEditable="true"></div>
+</section>
+<section>
+  <h3>&darr; Copy base64-encoded HTML from here</h3>
+  <textarea id="out" readonly="yes" cols="80" rows="10" wrap="off"></textarea>
+</section>
+<script>
+/*jslint indent: 2, maxlen: 80, browser: true */
+(function setup() {
+  'use strict';
+  var input = document.getElementById('in'),
+    output = document.getElementById('out'),
+    sel = output.select.bind(output);
+  input.oninput = function update() {
+    output.value = (':start:' + window.btoa(input.innerHTML) + ':end:'
+    ).replace(/(\S{70})/g, '$1\n');
+  };
+  output.onfocus = sel;
+  output.onkeyup = sel;
+  output.onmouseup = sel;
+}());
+</script>
+</body></html>
