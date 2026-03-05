@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Fetch anything</title>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <style type="text/css">
+    form input[name="url"] {
+      width: calc(100% - 12em);
+    }
+    form textarea {
+      width: calc(100% - 4em);
+      height: calc(100% - 6em);
+      resize: both;
+    }
+  </style>
+</head><body bgcolor="#CCCCCC">
+
+<form action="no-op://" method="get">
+  <p>URL: <input type="text" name="url" width="100">
+    <input type="submit" value="fetch"></p>
+  <p><textarea name="result" cols="120" rows="30"
+    >(Results will appear here)</textarea></p>
+</form>
+
+<script type="module" src="fetch-anything.mjs"></script>
+
+</body></html>
