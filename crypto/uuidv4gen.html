@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>UUIDv4 Generator</title>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <!-- meta http-equiv="refresh" content=";URL=" -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    a { text-decoration: none; }
+    li { margin-bottom: 0.5em; }
+  </style>
+</head><body>
+
+<ol id="links"></ol>
+<script type="module">
+(function init() {
+  const dest = document.getElementById('links');
+  const qry = new URLSearchParams(window.location.search);
+  const n = +qry.get('n') || 20;
+  let urlPattern = qry.get('u') || '\r<urn:uuid:>\v';
+  if (!urlPattern.includes('\v')) { urlPattern += '\v'; }
+  const captionPattern = urlPattern.replace(/\r<[^<>]*>/g, '');
+  for (let i = 0; i < n; i += 1) {
+    const uuid = window.crypto.randomUUID();
+    if (!uuid) {
+      dest.outerHTML = 'Error: Failed to generate UUID!';
+      return;
+    }
+    const li = document.createElement('li');
+    const lnk = document.createElement('a');
+    if (captionPattern === '\v') {
+      lnk.innerText = uuid;
+    } else {
+      lnk.innerText = captionPattern;
+      lnk.innerHTML = lnk.innerHTML.replace(/\v/g, '<b>' + uuid + '</b>');
+    }
+    lnk.href = urlPattern.replace(/\r|<|>/g, '').replace(/\v/g, uuid);
+    lnk.target = '_blank';
+    li.appendChild(lnk);
+    dest.appendChild(li);
+  }
+}());
+</script>
+
+</body></html>
